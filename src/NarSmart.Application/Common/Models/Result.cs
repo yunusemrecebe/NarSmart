@@ -39,6 +39,16 @@ public class Result<T>
         };
     }
 
+    public static Result<T> Failure(params string[] errors)
+    {
+        return new Result<T>
+        {
+            IsSuccess = false,
+            Errors = errors.ToList(),
+            StatusCode = 400
+        };
+    }
+
     public static Result<T> NotFound(string error)
     {
         return Failure(error, 404);
