@@ -57,6 +57,7 @@ public static class SeedData
 
         var hotel = Hotel.Create("NarSmart Demo Hotel", "Istanbul, Turkey",
             "Europe/Istanbul", DateTime.UtcNow);
+        hotel.HotelId = hotel.Id;
         await context.Hotels.AddAsync(hotel);
         await context.SaveChangesAsync();
         return hotel;

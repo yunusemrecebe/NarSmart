@@ -84,10 +84,10 @@ public class NarSmartDbContext : IdentityDbContext<ApplicationUser, IdentityRole
             switch (entry.State)
             {
                 case EntityState.Added:
-                    if (_tenantService is not null)
+                    if (entry.Entity.HotelId == Guid.Empty && _tenantService is not null && _tenantService.HotelId != Guid.Empty)
                         entry.Entity.HotelId = _tenantService.HotelId;
                     entry.Entity.CreatedAt = DateTime.UtcNow;
-                    if (_tenantService is not null)
+                    if (_tenantService is not null && _tenantService.UserId != Guid.Empty)
                         entry.Entity.CreatedBy = _tenantService.UserId.ToString();
                     entry.Entity.IsActive = true;
                     entry.Entity.IsDeleted = false;

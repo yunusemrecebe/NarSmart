@@ -27,7 +27,7 @@ services:
       Jwt__Audience: "NarSmartClients"
       Jwt__ExpirationInMinutes: "60"
     ports:
-      - "5000:8080"
+      - "5050:8080"
 
 volumes:
   narsmart-pgdata:
