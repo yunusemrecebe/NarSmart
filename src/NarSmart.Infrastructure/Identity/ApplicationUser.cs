@@ -9,6 +9,8 @@ public class ApplicationUser : IdentityUser<Guid>
     public string LastName { get; set; } = null!;
     public string RegistrationNumber { get; set; } = null!;
     public string? PhotoUrl { get; set; }
+    public DateTime? HireDate { get; set; }
+    public DateTime? TerminationDate { get; set; }
     public DateTime CreatedAt { get; set; }
     public string? CreatedBy { get; set; }
     public DateTime? UpdatedAt { get; set; }
