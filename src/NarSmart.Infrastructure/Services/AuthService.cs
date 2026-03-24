@@ -32,6 +32,7 @@ public class AuthService : IAuthService
             return Result<List<UserHotelDto>>.Failure("No account found with this email.");
 
         var hotels = await _context.UserHotels
+            .IgnoreQueryFilters()
             .Where(uh => uh.UserId == user.Id && !uh.IsDeleted)
             .Join(_context.Hotels.IgnoreQueryFilters().Where(h => !h.IsDeleted),
                 uh => uh.HotelId, h => h.Id,
@@ -61,6 +62,7 @@ public class AuthService : IAuthService
             return Result<LoginResponseDto>.Failure("Invalid email or password.");
 
         var hasAccess = await _context.UserHotels
+            .IgnoreQueryFilters()
             .AnyAsync(uh => uh.UserId == user.Id && uh.HotelId == hotelId && !uh.IsDeleted, cancellationToken);
 
         if (!hasAccess)
