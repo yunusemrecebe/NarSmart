@@ -1,0 +1,33 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: narsmart-db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: NarSmartDb
+    ports:
+      - "5432:5432"
+    volumes:
+      - narsmart-pgdata:/var/lib/postgresql/data
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: narsmart-api
+    depends_on:
+      - postgres
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_URLS: http://+:8080
+      ConnectionStrings__DefaultConnection: "Host=postgres;Port=5432;Database=NarSmartDb;Username=postgres;Password=postgres"
+      Jwt__Key: "NarSmartSuperSecretKeyForJwtToken2025!"
+      Jwt__Issuer: "NarSmart"
+      Jwt__Audience: "NarSmartClients"
+      Jwt__ExpirationInMinutes: "60"
+    ports:
+      - "5000:8080"
+
+volumes:
+  narsmart-pgdata:
