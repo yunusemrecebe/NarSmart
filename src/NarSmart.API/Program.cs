@@ -41,6 +41,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+await NarSmart.Infrastructure.Data.SeedData.InitializeAsync(app.Services);
+
 app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
