@@ -24,6 +24,31 @@ public class AuthService : IAuthService
         _context = context;
     }
 
+    public async Task<Result<List<UserHotelDto>>> GetUserHotelsAsync(
+        string email, CancellationToken cancellationToken = default)
+    {
+        var user = await _userManager.FindByEmailAsync(email);
+        if (user is null)
+            return Result<List<UserHotelDto>>.Failure("No account found with this email.");
+
+        var hotels = await _context.UserHotels
+            .Where(uh => uh.UserId == user.Id && !uh.IsDeleted)
+            .Join(_context.Hotels.IgnoreQueryFilters().Where(h => !h.IsDeleted),
+                uh => uh.HotelId, h => h.Id,
+                (uh, h) => new UserHotelDto
+                {
+                    HotelId = h.Id,
+                    HotelName = h.Name,
+                    Location = h.Location
+                })
+            .ToListAsync(cancellationToken);
+
+        if (hotels.Count == 0)
+            return Result<List<UserHotelDto>>.Failure("User does not have access to any hotel.");
+
+        return Result<List<UserHotelDto>>.Success(hotels);
+    }
+
     public async Task<Result<LoginResponseDto>> LoginAsync(
         string email, string password, Guid hotelId, CancellationToken cancellationToken = default)
     {
